@@ -8,7 +8,7 @@ matplotlib
 numpy>=1.23.0
 pandas>=1.5.0
 scipy>=1.9.3
-seaborn>=0.12.1
+seaborn
 setuptools>=65.5.0
 toyplot>=1.0.3
 toytree>=2.0.1

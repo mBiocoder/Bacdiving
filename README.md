@@ -6,10 +6,6 @@ Additionally, Bacdiving provides several options to visualize this information.
 Before using Bacdiving please register (for free) on [BacDive](https://api.bacdive.dsmz.de/).
 Using your BacDive credentials you can dive into Bacdiving. 
 
-In general, Bacdiving can deal with two types of input data: a taxonomy table (e.g. as extracted from a phyloseq-object) or an input file (.csv, .txt, .tsv) with one query-type per row.
-Possible BacDive query types include: BacDive id, taxonomy (as in species name), 16S sequencing accession id (e.g. SILVA id), culture collection accession id or genome sequence accession id.
-However, the input file should be consistant with only contain one (!) query type for all of its rows.
-
 # Installation
 
 Install Bacdiving from PyPi:

@@ -18,6 +18,12 @@ Install Bacdiving from PyPi:
 pip install bacdiving
 ```
 
+Make sure you have all the dependencies installed as well:
+
+```
+pip install -r requirements.txt
+```
+
 # Usage
 
 Here is a minimal example on how to use Bacdiving, please refer to the full [documentation](https://bacdiving.readthedocs.io/en/latest/index.html) for more details:

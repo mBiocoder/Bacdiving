@@ -10,7 +10,7 @@ In general, Bacdiving can deal with two types of input data: a taxonomy table (e
 Possible BacDive query types include: BacDive id, taxonomy (as in species name), 16S sequencing accession id (e.g. SILVA id), culture collection accession id or genome sequence accession id.
 However, the input file should be consistant with only contain one (!) query type for all of its rows.
 
-Here is a minimal example on how to use Bacdiving, please refer to the full documentation for more details:
+Here is a minimal example on how to use Bacdiving, please refer to the full [documentation](https://bacdiving.readthedocs.io/en/latest/index.html) for more details:
 
 ```
 from bacdiving import bacdive_caller as bc

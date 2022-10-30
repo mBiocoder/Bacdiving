@@ -78,3 +78,10 @@ vm.barplot_maker(resulting_df, "Sequence information.GC content.GC-content", "GC
 value_dict = vm.access_list_df_objects(resulting_df, "Culture and growth conditions.culture temp", "temperature", temp= 1, species_list=species_list)
 vm.boxplot_maker(value_dict, title= "Optimal temperature for species", xlabel_name= "species", figsize=[20, 10], ylabel_name="Opt. Culture Temp. $C^{o}$", saveToFile=True, output_dir="./")
 ```
+
+# Examples
+
+The examples/ folder contains the folders bacdiving_input_data/ and bacdiving_output_data/ as well as NetCoMi/:
+* bacdiving_input_data/ contains data of both types (taxonomy tables as well as input files) which were used to test Bacdiving. 
+* bacdiving_output_data/ contains all of Bacdiving's resulting files and figures for all input datasets.
+* NetCoMi/ contains the code (Python-code to modify the data for using NetCoMi in R + R-code to run NetCoMi), resulting R-objects as well as all resulting networks after running [NetCoMi](https://github.com/stefpeschel/NetCoMi). These networks make a species-level phenotypic comparison between healthy and IBS data where the nodes in the networks are colored based on various information from BacDive (e.g. antibiotic resistance, motility, oxygen tolerance, ...). Please refer to NetCoMi for more details on how to plot different networks. This repository shall only demonstrate that the data extracted from BacDive (using Bacdiving) can be used for other tools as well to enrich the results with bacterial phenotypic information.

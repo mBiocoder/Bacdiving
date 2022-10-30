@@ -1,15 +1,17 @@
 [build-system]
 requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
+
 [project]
 name = "bacdiving"
-version = "1.1.6"
+version = "1.2.4"
 authors = [
   { name="Mahima Arunkumar", email="M.Arunkumar@campus.lmu.de" },
 ]
+keywords = ["BacDive", "bacteria", "phenotype information"]
 description = "Bacdiving accesses the Bacterial Diversity Metadatabase BacDive and provides various visualization options."
 readme = "README.md"
-requires-python = ">=3.7"
+requires-python = ">=3.8"
 classifiers = [
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
@@ -21,10 +23,10 @@ dependencies = [
   'bacdive>=0.2',
   'bokeh>=2.4.3',
   'ete3>=3.1.2',
-  'matplotlib>=3.6.1',
-  'numpy>=1.20.4',
+  'matplotlib==3.6.0',
+  'numpy>=1.23.0',
   'pandas>=1.5.0',
-  'seaborn>=0.12.0',
+  'seaborn',
   'setuptools>=65.5.0',
   'scipy>=1.9.2',
   'toyplot>=1.0.3',
@@ -35,4 +37,5 @@ dependencies = [
 
 [project.urls]
 "BacDive Homepage" = "https://bacdive.dsmz.de/"
-"Documentation" = "https://github.com/"
+"Documentation" = "https://bacdiving.readthedocs.io/en/latest/"
+"Github" = "https://github.com/mBiocoder/Bacdiving"

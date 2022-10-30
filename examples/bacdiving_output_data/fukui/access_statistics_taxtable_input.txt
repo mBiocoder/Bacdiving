@@ -1,0 +1,57 @@
+-- Access statistics --
+-> Your input taxtable file contains 6863 rows. After removing NaN species-values from the dataframe we are left with 454 rows.
+-> Total number of rows are: 454, out of which 88.55% were found on Bacdive. Therefore, 52 species were not found in Bacdive.
+
+The following species were not found on Bacdive: 
+Erysipelotrichaceae_UCG-003 bacterium
+Negativibacillus massiliensis
+Ruminococcus bicirculans
+Blautia provencensis
+Alistipes massiliensis
+Lachnospiraceae_NK4A136_group bacterium
+Escherichia/Shigella coli
+Lachnospiraceae_NK4A136_group bacterium
+Escherichia/Shigella coli
+Escherichia/Shigella coli
+Lachnospiraceae_NK4A136_group bacterium
+Clostridium_sensu_stricto_1 butyricum
+Acidaminococcus timonensis
+Escherichia/Shigella coli
+Lachnospiraceae_FCS020_group bacterium
+Escherichia/Shigella coli
+Erysipelotrichaceae_UCG-003 bacterium
+Escherichia/Shigella coli
+Escherichia/Shigella coli
+Clostridium_sensu_stricto_1 disporicum
+Escherichia/Shigella coli
+Coprococcus catus
+Olsenella provencensis
+Escherichia/Shigella coli
+Ruminococcus callidus
+Escherichia/Shigella coli
+Escherichia/Shigella coli
+Clostridium_sensu_stricto_1 butyricum
+Sutterella seckii
+Escherichia/Shigella coli
+Clostridium_sensu_stricto_1 paraputrificum
+Phocea massiliensis
+Clostridium_sensu_stricto_1 perfringens
+Acidaminococcus massiliensis
+Clostridium_sensu_stricto_1 paraputrificum
+Escherichia/Shigella coli
+Escherichia/Shigella coli
+Clostridium_sensu_stricto_1 perfringens
+Lachnoclostridium pacaense
+Clostridium_sensu_stricto_1 perfringens
+Lachnospiraceae_UCG-001 bacterium
+Brachyspira aalborgi
+Clostridium_sensu_stricto_1 perfringens
+Sanguibacteroides justesenii
+Clostridium_sensu_stricto_1 butyricum
+Varibaculum timonense
+Clostridium_sensu_stricto_1 disporicum
+Raoultibacter timonensis
+Clostridium_sensu_stricto_1 disporicum
+Anaerotruncus rubiinfantis
+Escherichia/Shigella coli
+Escherichia/Shigella coli

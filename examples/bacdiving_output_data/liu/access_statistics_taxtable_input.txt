@@ -1,0 +1,63 @@
+-- Access statistics --
+-> Your input taxtable file contains 5557 rows. After removing NaN species-values from the dataframe we are left with 571 rows.
+-> Total number of rows are: 571, out of which 89.84% were found on Bacdive. Therefore, 58 species were not found in Bacdive.
+
+The following species were not found on Bacdive: 
+Erysipelotrichaceae_UCG-003 bacterium
+Ruminococcus bromii
+Ruminococcus bromii
+Lachnoclostridium edouardi
+Coprococcus catus
+Ruminococcus bicirculans
+Lachnospiraceae_NK4A136_group bacterium
+Ruminococcus callidus
+Escherichia/Shigella coli
+Escherichia/Shigella coli
+Halanaerobium fermentans
+Colidextribacter massiliensis
+Lachnospiraceae_UCG-001 bacterium
+Clostridium_sensu_stricto_1 paraputrificum
+Escherichia/Shigella coli
+Raoultibacter timonensis
+Escherichia/Shigella coli
+Escherichia/Shigella coli
+Clostridium_sensu_stricto_1 disporicum
+Bacillus longiquaesitum
+Clostridium_sensu_stricto_1 butyricum
+Phoenicibacter massiliensis
+Escherichia/Shigella coli
+Alistipes massiliensis
+Lachnospiraceae_NK4A136_group bacterium
+Lachnospiraceae_NK4A136_group bacterium
+Escherichia/Shigella coli
+Nitrospira nitrosa
+Clostridium_sensu_stricto_1 neonatale
+Hydrogenophaga laconesensis
+Lachnospiraceae_NK4A136_group bacterium
+Escherichia/Shigella coli
+Nitrospira defluvii
+Escherichia/Shigella coli
+Phocea massiliensis
+Negativibacillus massiliensis
+Clostridium_sensu_stricto_1 disporicum
+Lachnoanaerobaculum cf.
+Clostridium_sensu_stricto_1 isatidis
+Helicobacter rodentium
+Idiomarina piscisalsi
+Clostridium_sensu_stricto_1 tertium
+Lachnospiraceae_NK4A136_group bacterium
+Sanguibacteroides justesenii
+Buchnera aphidicola
+Nordella oligomobilis
+Lachnoclostridium urinimassiliense
+Pseudanabaena_PCC-7429 galeata
+Planktothricoides_SR001 raciborskii
+Olsenella phocaeensis
+Clostridium_sensu_stricto_1 butyricum
+Tropheryma whipplei
+marine_group metagenome
+Clostridium_sensu_stricto_5 algidicarnis
+Bacteroides cutis
+Oscillatoria tenuis
+Lachnoclostridium phytofermentans
+Clostridium_sensu_stricto_15 cochlearium

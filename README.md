@@ -6,11 +6,17 @@ Additionally, Bacdiving provides several options to visualize this information.
 Before using Bacdiving please register (for free) on [BacDive](https://api.bacdive.dsmz.de/).
 Using your BacDive credentials you can dive into Bacdiving. 
 
-In general, Bacdiving can deal with two types of input data: a taxonomy table (e.g. as extracted from a phyloseq-object) or an input file (.csv, .txt, .tsv) with one query-type per row.
-Possible BacDive query types include: BacDive id, taxonomy (as in species name), 16S sequencing accession id (e.g. SILVA id), culture collection accession id or genome sequence accession id.
-However, the input file should be consistant with only contain one (!) query type for all of its rows.
+# Installation
 
-Here is a minimal example on how to use Bacdiving, please refer to the full [documentation](https://bacdiving.readthedocs.io/en/latest/) for more details:
+Install Bacdiving from PyPi:
+
+```
+pip install bacdiving
+```
+
+# Usage
+
+Here is a minimal example on how to use Bacdiving, please refer to the full [documentation](https://bacdiving.readthedocs.io/en/latest/index.html) for more details:
 
 ```
 from bacdiving import bacdive_caller as bc
@@ -25,7 +31,7 @@ resulting_df = bc.bacdive_call(input_via_file=1, input_file_path="./input_data/S
 resulting_df = bc.bacdive_call(input_via_file= 1, input_file_path="./input_data/Taxonomy_ids.txt", search_by_taxonomy = True, output_dir="./output_data/SILVA/", print_res_df_ToFile= 1, print_access_stats=1)
 
 #Bacdive id query
-resulting_df = bc.bacdive_call(input_via_file= 1, input_file_path="./input_data/Bacdive_ids.txt", search_by_id = True, output_dir="./", print_res_df_ToFile= 1)
+resulting_df = bc.bacdive_call(input_via_file= 1, input_file_path="./input_data/Bacdive_ids.txt", search_by_id = True, taxtable_input = 0, taxtable_file_path='./input_data/taxtable_from_phyloseq/mars_taxtab.tsv', output_dir="./", print_res_df_ToFile= 1)
 
 #Culture collection query
 resulting_df = bc.bacdive_call(input_via_file= 1, input_file_path="Culture_col_ids.txt", search_by_culture_collection = True, taxtable_input = 0, output_dir="./", print_res_df_ToFile= 1)
@@ -43,12 +49,12 @@ resulting_list_with_all_res_dfs = bc.bacdive_access_for_multiple_inputs(input_li
 ```
 ### Some possible visualizations ###
 
+#Relative abundance plot
+vm.stacked_barplot_relative_abundance(resulting_list_with_all_res_dfs, sample_names=["Silva_input", "Taxtab_input"], plot_column="Name and taxonomic classification.genus", title="Relative abundance", saveToFile = True, output_dir="./")
+
 #Tree plots
 tm.overview_treeplot(resulting_df, label_name1="Temperature", label_name2="Oxygen tolerance", saveToFile=True, output_dir="./")
 tm.circular_treeplot(resulting_df, output_dir="./")
-
-#Relative abundance plot
-vm.stacked_barplot_relative_abundance(resulting_list_with_all_res_dfs, sample_names=["Silva_input", "Taxtab_input"], plot_column="Name and taxonomic classification.genus", title="Relative abundance", saveToFile = True, output_dir="./")
 
 #Fatty acid profile plot
 vm.fatty_acid_profile(resulting_df, species = "Achromobacter denitrificans",  figsize=[20, 15], saveToFile=True, output_dir="./")

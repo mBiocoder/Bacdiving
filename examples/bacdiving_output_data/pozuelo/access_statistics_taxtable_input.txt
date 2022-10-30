@@ -1,0 +1,42 @@
+-- Access statistics --
+-> Your input taxtable file contains 22206 rows. After removing NaN species-values from the dataframe we are left with 327 rows.
+-> Total number of rows are: 327, out of which 88.69% were found on Bacdive. Therefore, 37 species were not found in Bacdive.
+
+The following species were not found on Bacdive: 
+Ruminococcus bromii
+Erysipelotrichaceae_UCG-003 bacterium
+Ruminococcus bicirculans
+Lachnospiraceae_NK4A136_group bacterium
+Lachnoclostridium edouardi
+Ruminococcus callidus
+Coprococcus catus
+Lachnospiraceae_UCG-001 bacterium
+Alistipes massiliensis
+Negativibacillus massiliensis
+Sutterella seckii
+Bacteroides cutis
+Clostridium_sensu_stricto_1 paraputrificum
+Lachnospiraceae_FCS020_group bacterium
+Bacteroides ndongoniae
+Colidextribacter massiliensis
+Clostridium_sensu_stricto_1 disporicum
+Mailhella massiliensis
+Clostridium_sensu_stricto_1 butyricum
+Lachnoclostridium urinimassiliense
+Clostridium_sensu_stricto_1 tertium
+Lachnoclostridium pacaense
+Phocea massiliensis
+Clostridium_sensu_stricto_1 butyricum
+Bacteroides mediterraneensis
+Sanguibacteroides justesenii
+Clostridium_sensu_stricto_13 subterminale
+Merdibacter massiliensis
+Lactobacillus timonensis
+Anaerotruncus rubiinfantis
+Angelakisella massiliensis
+Clostridium_sensu_stricto_1 disporicum
+Varibaculum timonense
+Clostridium_sensu_stricto_1 perfringens
+Raoultibacter timonensis
+Clostridium_sensu_stricto_6 bornimense
+Phoenicibacter massiliensis

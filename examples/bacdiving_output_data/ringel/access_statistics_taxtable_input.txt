@@ -1,0 +1,23 @@
+-- Access statistics --
+-> Your input taxtable file contains 3261 rows. After removing NaN species-values from the dataframe we are left with 209 rows.
+-> Total number of rows are: 209, out of which 91.39% were found on Bacdive. Therefore, 18 species were not found in Bacdive.
+
+The following species were not found on Bacdive: 
+Erysipelotrichaceae_UCG-003 bacterium
+Erysipelotrichaceae_UCG-003 bacterium
+Ruminococcus bicirculans
+Lachnospiraceae_NK4A136_group bacterium
+Escherichia/Shigella coli
+Escherichia/Shigella coli
+Escherichia/Shigella coli
+Escherichia/Shigella coli
+Negativibacillus massiliensis
+Escherichia/Shigella coli
+Escherichia/Shigella coli
+Escherichia/Shigella coli
+Ruminococcus callidus
+Escherichia/Shigella coli
+Lachnospiraceae_UCG-001 bacterium
+Lachnospiraceae_NK4A136_group bacterium
+Collinsella phocaeensis
+Escherichia/Shigella coli

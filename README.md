@@ -6,6 +6,8 @@ Additionally, Bacdiving provides several options to visualize this information.
 Before using Bacdiving please register (for free) on [BacDive](https://api.bacdive.dsmz.de/).
 Using your BacDive credentials you can dive into Bacdiving. 
 
+ [Documentation](https://bacdiving.readthedocs.io/en/latest/index.html)
+
 # Installation
 
 Install Bacdiving from PyPi:
@@ -22,28 +24,35 @@ Here is a minimal example on how to use Bacdiving, please refer to the full [doc
 from bacdiving import bacdive_caller as bc
 from bacdiving import treeplots_maker as tm
 from bacdiving import visualizations_maker as vm
-
 ### Retrieve and access information stored on BacDive ###
-#SILVA id query
-resulting_df = bc.bacdive_call(input_via_file=1, input_file_path="./input_data/SILVA_ids.txt",search_by_16S_seq_accession=True, print_res_df_ToFile=1, print_access_stats=1)
 
-#Taxonomy query
-resulting_df = bc.bacdive_call(input_via_file= 1, input_file_path="./input_data/Taxonomy_ids.txt", search_by_taxonomy = True, output_dir="./output_data/SILVA/", print_res_df_ToFile= 1, print_access_stats=1)
+# Run for a single input from text file for SILVA id queries
+resulting_list_with_all_res_dfs = bc.bacdive_call(bacdive_id="<your ID>", bacdive_password="<your password>", input_lists={"./SILVA_ids.txt" : ["input_via_file", "search_by_16S_seq_accession"]}, sample_names=["silva"], output_dir="./")
+resulting_df = resulting_list_with_all_res_dfs[0]  
 
-#Bacdive id query
-resulting_df = bc.bacdive_call(input_via_file= 1, input_file_path="./input_data/Bacdive_ids.txt", search_by_id = True, taxtable_input = 0, taxtable_file_path='./input_data/taxtable_from_phyloseq/mars_taxtab.tsv', output_dir="./", print_res_df_ToFile= 1)
+# Run for a single input from text file for taxonomy queries
+resulting_list_with_all_res_dfs = bc.bacdive_call(input_lists={"./taxonomy_ids.txt" : ["input_via_file", "search_by_taxonomy"]}, sample_names=["taxonomy"], output_dir="./results/") # if credentials are not given via parameters, you will get prompted
+resulting_df = resulting_list_with_all_res_dfs[0] 
 
-#Culture collection query
-resulting_df = bc.bacdive_call(input_via_file= 1, input_file_path="Culture_col_ids.txt", search_by_culture_collection = True, taxtable_input = 0, output_dir="./", print_res_df_ToFile= 1)
+# Run for a single input from text file for BacDive id queries
+resulting_list_with_all_res_dfs = bc.bacdive_call(bacdive_id="<your ID>", bacdive_password="<your password>", input_lists={"./bacdive_ids.txt" : ["input_via_file", "search_by_id"]}, sample_names=["bacdive"], output_dir="./")
+resulting_df = resulting_list_with_all_res_dfs[0] 
 
-#Genome accession query
-resulting_df = bc.bacdive_call(input_via_file= 1, input_file_path="Genome_accession_ids.txt", search_by_genome_accession = True, output_dir="./", print_res_df_ToFile= 1)
+# Run for a single input from text file for culture collection queries
+resulting_list_with_all_res_dfs = bc.bacdive_call(bacdive_id="<your ID>", bacdive_password="<your password>", input_lists={"./culture_col_ids.txt" : ["input_via_file", "search_by_culture_collection"]}, sample_names=["culturecol"], output_dir="./")
+resulting_df = resulting_list_with_all_res_dfs[0] 
 
-#Taxonomy table input (e.g. as extracted from phyloseq-object)
-resulting_df = bc.bacdive_call(taxtable_input = 1, taxtable_file_path='./input_data/taxtable_from_phyloseq/taxtab.tsv', output_dir="./", print_res_df_ToFile= 1, print_access_stats=1)
+# Run for a single input from text file for genome accession queries
+resulting_list_with_all_res_dfs = bc.bacdive_call(bacdive_id="<your ID>", bacdive_password="<your password>", input_lists={"./genome_ids.txt" : ["input_via_file", "search_by_genome_accession"]}, sample_names=["genomecol"], output_dir="./")
+resulting_df = resulting_list_with_all_res_dfs[0] 
+
+# Run for single taxonomy table input (e.g. as extracted from phyloseq-object)
+resulting_list_with_all_res_dfs = bc.bacdive_call(bacdive_id="<your ID>", bacdive_password="<your password>", input_lists={"./taxtab.tsv" : ["taxtable_input"]}, sample_names=["taxtab"], output_dir="./")
+resulting_df = resulting_list_with_all_res_dfs[0] 
 
 # Run for multiple inputs (of possibly different input types)
-resulting_list_with_all_res_dfs = bc.bacdive_access_for_multiple_inputs(input_lists={"./input_data/SILVA_ids.txt" : ["input_via_file", "search_by_16S_seq_accession"], "./input_data/taxtable_from_phyloseq/taxtab.tsv" : ["taxtable_input"]})
+resulting_list_with_all_res_dfs = bc.bacdive_call(bacdive_id="<your ID>", bacdive_password="<your password>", input_lists={"./SILVA_ids.txt" : ["input_via_file", "search_by_16S_seq_accession"], "./taxonomy_ids.txt" : ["input_via_file", "search_by_taxonomy"], "./taxtab1.tsv" : ["taxtable_input"], "./taxtab2.tsv" : ["taxtable_input"]},sample_names=["sample1", "sample2", "sample3", "sample4"])
+resulting_df = resulting_list_with_all_res_dfs[1]  # pick your dataframe of interest from this list
 ```
 
 ```

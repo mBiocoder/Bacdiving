@@ -53,21 +53,11 @@ As soon as you have registered on BacDive, you can use your credentials to run B
 
 .. autofunction:: bacdiving.bacdive_call()
 
-The first thing :py:func:`bacdiving.bacdive_call()` does is, it will prompt you to input your login credentials prior to querying BacDive. 
-After that, it generates the resulting dataframe (BacdiveInformation.tsv) with all strain-level information and 
+The first thing :py:func:`bacdiving.bacdive_call()` does is, it will prompt you to input your login credentials prior to querying BacDive, if you did not input your credentials via the function parameters ``"bacdive_id"`` and ``"bacdive_password"``. 
+
+After that, it generates the resulting dataframe(s) (BacdiveInformation.tsv) with all strain-level information and 
 it can output the BacDive access statistics (if the parameter is set) as a .txt-file which gives information on the percentage of input
 species found on BacDive and also lists all species which could not be found on BacDive.
-
-You do not need to run :py:func:`bacdiving.bacdive_call()` multiple times if you have multiple input files for which you require BacDive information. 
-Just use :py:func:`bacdiving.bacdive_access_for_multiple_inputs()` instead:
-
-.. autofunction:: bacdiving.bacdive_access_for_multiple_inputs()
-
-Just like with :py:func:`bacdiving.bacdive_call()`, :py:func:`bacdiving.bacdive_access_for_multiple_inputs()` will prompt you to input your BacDive credentials.
-However, if you prefer not to input your credentials for every single dataset, you can simply specify it once via the function's parameters ``"bacdive_id"`` and ``"bacdive_password"`` and :py:func:`bacdiving.bacdive_access_for_multiple_inputs()` will not ask you again.
-
-.. note::  The single resulting dataframe from calling :py:func:`bacdiving.bacdive_access_for_multiple_inputs()` will contain strain-level BacDive information for **all** input files.
-
 
 For accessing specific data entries in your resulting dataframe you can either run :py:func:`bacdiving.get_resulting_df_values()` or :py:func:`bacdiving.access_list_df_objects()`. 
 

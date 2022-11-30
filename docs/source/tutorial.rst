@@ -29,8 +29,9 @@ To get the resulting dataframe with all strain-level BacDive information for all
 
 .. code-block:: python
 
-	#Taxonomy table input (e.g. as extracted from phyloseq-object)
-	resulting_df = bc.bacdive_call(taxtable_input = 1, taxtable_file_path='./input_data/taxtable_from_phyloseq/taxtab.tsv', output_dir="./", print_res_df_ToFile= 1, print_access_stats=1)
+	# Run for single taxonomy table input (e.g. as extracted from phyloseq-object)
+	resulting_list_with_all_res_dfs = bc.bacdive_call(bacdive_id="<your ID>", bacdive_password="<your password>", input_lists={"./taxtab.tsv" : ["taxtable_input"]}, sample_names=["taxtab"], output_dir="./")
+	resulting_df = resulting_list_with_all_res_dfs[0]
 
 Assuming you do not have a taxonomy table, but have a simple file as input instead which looks something like this:
 
@@ -54,29 +55,33 @@ Given your input file, you can run the following, depending on your input type:
 
 .. code-block:: python
 
-	#SILVA id query
-	resulting_df = bc.bacdive_call(input_via_file=1, input_file_path="./input_data/SILVA_ids.txt",search_by_16S_seq_accession=True, print_res_df_ToFile=1, print_access_stats=1)
+	# Run for a single input from text file for SILVA id queries
+	resulting_list_with_all_res_dfs = bc.bacdive_call(bacdive_id="<your ID>", bacdive_password="<your password>", input_lists={"./SILVA_ids.txt" : ["input_via_file", "search_by_16S_seq_accession"]}, sample_names=["silva"], output_dir="./")
+	resulting_df = resulting_list_with_all_res_dfs[0]  
 
-	#Taxonomy query
-	resulting_df = bc.bacdive_call(input_via_file= 1, input_file_path="./input_data/Taxonomy_ids.txt", search_by_taxonomy = True, output_dir="./", print_res_df_ToFile= 1, print_access_stats=1)
+	# Run for a single input from text file for taxonomy queries
+	resulting_list_with_all_res_dfs = bc.bacdive_call(input_lists={"./taxonomy_ids.txt" : ["input_via_file", "search_by_taxonomy"]}, sample_names=["taxonomy"], output_dir="./results/") # if credentials are not given via parameters, you will get prompted
+	resulting_df = resulting_list_with_all_res_dfs[0] 
 
-	#Bacdive id query
-	resulting_df = bc.bacdive_call(input_via_file= 1, input_file_path="./input_data/Bacdive_ids.txt", search_by_id = True, output_dir="./", print_res_df_ToFile= 1)
+	# Run for a single input from text file for BacDive id queries
+	resulting_list_with_all_res_dfs = bc.bacdive_call(bacdive_id="<your ID>", bacdive_password="<your password>", input_lists={"./bacdive_ids.txt" : ["input_via_file", "search_by_id"]}, sample_names=["bacdive"], output_dir="./")
+	resulting_df = resulting_list_with_all_res_dfs[0] 
 
-	#Culture collection query
-	resulting_df = bc.bacdive_call(input_via_file= 1, input_file_path="Culture_col_ids.txt", search_by_culture_collection = True, taxtable_input = 0, output_dir="./", print_res_df_ToFile= 1)
+	# Run for a single input from text file for culture collection queries
+	resulting_list_with_all_res_dfs = bc.bacdive_call(bacdive_id="<your ID>", bacdive_password="<your password>", input_lists={"./culture_col_ids.txt" : ["input_via_file", "search_by_culture_collection"]}, sample_names=["culturecol"], output_dir="./")
+	resulting_df = resulting_list_with_all_res_dfs[0] 
 
-	#Genome accession query
-	resulting_df = bc.bacdive_call(input_via_file= 1, input_file_path="Genome_accession_ids.txt", search_by_genome_accession = True, output_dir="./", print_res_df_ToFile= 1)
-
+	# Run for a single input from text file for genome accession queries
+	resulting_list_with_all_res_dfs = bc.bacdive_call(bacdive_id="<your ID>", bacdive_password="<your password>", input_lists={"./genome_ids.txt" : ["input_via_file", "search_by_genome_accession"]}, sample_names=["genomecol"], output_dir="./")
+	resulting_df = resulting_list_with_all_res_dfs[0]
 
 If you have multiple inputs of possibly different input types, you can run the following command:
 
 .. code-block:: python
 
 	# Run for multiple inputs (of possibly different input types)
-	resulting_list_with_all_res_dfs = bc.bacdive_access_for_multiple_inputs(input_lists={"./input_data/SILVA_ids.txt" : ["input_via_file", "search_by_16S_seq_accession"], "./input_data/taxtable_from_phyloseq/taxtab.tsv" : ["taxtable_input"]})
-
+	resulting_list_with_all_res_dfs = bc.bacdive_call(bacdive_id="<your ID>", bacdive_password="<your password>", input_lists={"./SILVA_ids.txt" : ["input_via_file", "search_by_16S_seq_accession"], "./taxonomy_ids.txt" : ["input_via_file", "search_by_taxonomy"], "./taxtab1.tsv" : ["taxtable_input"], "./taxtab2.tsv" : ["taxtable_input"]},sample_names=["sample1", "sample2", "sample3", "sample4"])
+	resulting_df = resulting_list_with_all_res_dfs[1]  # pick your dataframe of interest from this list
 
 Now that you have the resulting dataframe at hand, you are almost ready to start visualizing the data. 
 
@@ -248,12 +253,14 @@ This results in the following plot:
     :figclass: align-center
 
 
-Lastly, since we also ran :py:func:`bacdiving.bacdive_access_for_multiple_inputs()` before, we can compare the relative abundances of e.g. the genera for our SILVA-ids.txt and our taxonomy table input in a stacked bar plot:
+Lastly, we can compare the relative abundances of e.g. the genera for our SILVA-ids.txt and our taxonomy table input in a stacked bar plot:
 
 .. code-block:: python
 
 	# Run for multiple inputs
-	resulting_list_with_all_res_dfs = bc.bacdive_access_for_multiple_inputs({"input_data/SILVA_ids.txt" : ["input_via_file", "search_by_16S_seq_accession"], "input_data/taxtable_from_phyloseq/nagel_taxtab.tsv" : ["taxtable_input"]}, output_dir="./")
+	resulting_list_with_all_res_dfs = bc.bacdive_call(input_lists={"./SILVA_ids.txt" : ["input_via_file", "search_by_16S_seq_accession"], "./taxtab.tsv" : ["taxtable_input"]},sample_names=["SILVA_ids", "Nagel_taxtab"])
+	#Relative abundance plot
+	vm.stacked_barplot_relative_abundance(resulting_list_with_all_res_dfs, sample_names=["SILVA_ids", "Nagel_taxtab"], plot_column="Name and taxonomic classification.genus", title="Relative abundance", saveToFile = True, output_dir="./")
  
 This results in the following plot:
 
@@ -266,6 +273,6 @@ This results in the following plot:
 
 In effect, this plot shows us the genera composition for all those species (for which BacDive information is available) in the resulting dataframe.
 
-This concludes this tutorial for Bacdiving but feel free to use the resulting dataframe to either generate your own custom visualizations or to use it as an input for other tools!
+.. note:: This concludes this tutorial for Bacdiving but feel free to use the resulting dataframe to either generate your own custom visualizations or to use it as an input for other tools!
 
 

@@ -9,7 +9,7 @@ URL = 'https://github.com/mBiocoder/Bacdiving'
 EMAIL = 'M.Arunkumar@campus.lmu.de'
 AUTHOR = 'Mahima Arunkumar'
 REQUIRES_PYTHON = '>=3.8.0'
-VERSION = "1.2.5"
+VERSION = "1.2.7"
 
 # What packages are required for this module to be executed?
 REQUIRED = [

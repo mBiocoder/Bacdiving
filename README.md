@@ -24,34 +24,35 @@ Here is a minimal example on how to use Bacdiving, please refer to the full [doc
 from bacdiving import bacdive_caller as bc
 from bacdiving import treeplots_maker as tm
 from bacdiving import visualizations_maker as vm
+
 ### Retrieve and access information stored on BacDive ###
 
 # Run for a single input from text file for SILVA id queries
-resulting_list_with_all_res_dfs = bc.bacdive_call(bacdive_id="<your ID>", bacdive_password="<your password>", input_lists={"./SILVA_ids.txt" : ["input_via_file", "search_by_16S_seq_accession"]}, sample_names=["silva"], output_dir="./")
+resulting_list_with_all_res_dfs = bc.bacdive_call(bacdive_id="<your ID>", bacdive_password="<your password>", inputs_list=["./SILVA_ids.txt input_via_file search_by_16S_seq_accession"], sample_names=["SILVA"], output_dir="./")
 resulting_df = resulting_list_with_all_res_dfs[0]  
 
 # Run for a single input from text file for taxonomy queries
-resulting_list_with_all_res_dfs = bc.bacdive_call(input_lists={"./taxonomy_ids.txt" : ["input_via_file", "search_by_taxonomy"]}, sample_names=["taxonomy"], output_dir="./results/") # if credentials are not given via parameters, you will get prompted
+resulting_list_with_all_res_dfs = bc.bacdive_call(inputs_list=["./taxonomy_ids.txt input_via_file search_by_taxonomy"], sample_names=["taxonomy"], output_dir="./results/") # if credentials are not given via parameters, you will get prompted
 resulting_df = resulting_list_with_all_res_dfs[0] 
 
 # Run for a single input from text file for BacDive id queries
-resulting_list_with_all_res_dfs = bc.bacdive_call(bacdive_id="<your ID>", bacdive_password="<your password>", input_lists={"./bacdive_ids.txt" : ["input_via_file", "search_by_id"]}, sample_names=["bacdive"], output_dir="./")
+resulting_list_with_all_res_dfs = bc.bacdive_call(bacdive_id="<your ID>", bacdive_password="<your password>", inputs_list=["./bacdive_ids.txt input_via_file search_by_id"], sample_names=["bacdive"], output_dir="./")
 resulting_df = resulting_list_with_all_res_dfs[0] 
 
 # Run for a single input from text file for culture collection queries
-resulting_list_with_all_res_dfs = bc.bacdive_call(bacdive_id="<your ID>", bacdive_password="<your password>", input_lists={"./culture_col_ids.txt" : ["input_via_file", "search_by_culture_collection"]}, sample_names=["culturecol"], output_dir="./")
+resulting_list_with_all_res_dfs = bc.bacdive_call(bacdive_id="<your ID>", bacdive_password="<your password>", inputs_list=["./culture_col_ids.txt input_via_file search_by_culture_collection"], sample_names=["culturecol"], output_dir="./")
 resulting_df = resulting_list_with_all_res_dfs[0] 
 
 # Run for a single input from text file for genome accession queries
-resulting_list_with_all_res_dfs = bc.bacdive_call(bacdive_id="<your ID>", bacdive_password="<your password>", input_lists={"./genome_ids.txt" : ["input_via_file", "search_by_genome_accession"]}, sample_names=["genomecol"], output_dir="./")
+resulting_list_with_all_res_dfs = bc.bacdive_call(bacdive_id="<your ID>", bacdive_password="<your password>", inputs_list=["./genome_ids.txt input_via_file search_by_genome_accession"], sample_names=["genomecol"], output_dir="./") 
 resulting_df = resulting_list_with_all_res_dfs[0] 
 
 # Run for single taxonomy table input (e.g. as extracted from phyloseq-object)
-resulting_list_with_all_res_dfs = bc.bacdive_call(bacdive_id="<your ID>", bacdive_password="<your password>", input_lists={"./taxtab.tsv" : ["taxtable_input"]}, sample_names=["taxtab"], output_dir="./")
+resulting_list_with_all_res_dfs = bc.bacdive_call(bacdive_id="<your ID>", bacdive_password="<your password>", inputs_list=["./taxtab.tsv taxtable_input"], sample_names=["taxtab"], print_res_df_ToFile = True, print_access_stats = True, print_flattened_file=True, columns_of_interest=["Physiology and metabolism.oxygen tolerance.oxygen tolerance", "Culture and growth conditions.culture temp.temperature", "Isolation, sampling and environmental information.isolation.origin.country","Morphology.cell morphology.motility"], output_dir="./") 
 resulting_df = resulting_list_with_all_res_dfs[0] 
 
 # Run for multiple inputs (of possibly different input types)
-resulting_list_with_all_res_dfs = bc.bacdive_call(bacdive_id="<your ID>", bacdive_password="<your password>", input_lists={"./SILVA_ids.txt" : ["input_via_file", "search_by_16S_seq_accession"], "./taxonomy_ids.txt" : ["input_via_file", "search_by_taxonomy"], "./taxtab1.tsv" : ["taxtable_input"], "./taxtab2.tsv" : ["taxtable_input"]},sample_names=["sample1", "sample2", "sample3", "sample4"])
+resulting_list_with_all_res_dfs = bc.bacdive_call(bacdive_id="<your ID>", bacdive_password="<your password>", inputs_list=["./SILVA_ids.txt input_via_file search_by_16S_seq_accession", "./taxonomy_ids.txt input_via_file search_by_taxonomy", "./taxtab1.tsv taxtable_input", "./taxtab2.tsv taxtable_input"], sample_names=["sample1", "sample2", "sample3", "sample4"], print_flattened_file=True, columns_of_interest=["Physiology and metabolism.oxygen tolerance.oxygen tolerance", "Culture and growth conditions.culture temp.temperature"])
 resulting_df = resulting_list_with_all_res_dfs[1]  # pick your dataframe of interest from this list
 ```
 

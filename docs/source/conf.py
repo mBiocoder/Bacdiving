@@ -14,7 +14,7 @@ sys.path.insert(0, pathlib.Path(__file__).parents[1].resolve().as_posix())
 project = 'Bacdiving'
 copyright = '2022, Mahima Arunkumar'
 author = 'Mahima Arunkumar'
-release = '1.1.6'
+release = '1.2.7'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration

@@ -13,7 +13,7 @@ pd.set_option('display.max_rows', None)
 from alive_progress import alive_bar
 
 
-def base_call(bacdive_id ="", bacdive_password ="", input_via_file = 0, input_file_path =" ", search_by_id = False, search_by_culture_collection = False, search_by_taxonomy = False, search_by_16S_seq_accession = False, search_by_genome_accession = False, taxtable_input = 0, taxtable_file_path =" ", sample_name = "", print_res_df_ToFile = 1, print_access_stats = 0, output_dir ="./"):
+def base_call(bacdive_id ="", bacdive_password ="", input_via_file = 0, input_file_path =" ", search_by_id = False, search_by_culture_collection = False, search_by_taxonomy = False, search_by_16S_seq_accession = False, search_by_genome_accession = False, taxtable_input = 0, taxtable_file_path =" ", sample_name = "", print_res_df_ToFile = True, print_access_stats = True, output_dir ="./"):
     """
     Reads input, queries BacDive database and stores resulting dataframe and access statistics.
 
@@ -89,11 +89,11 @@ def base_call(bacdive_id ="", bacdive_password ="", input_via_file = 0, input_fi
             resulting_df = pd.concat(dfs, ignore_index=True)  # concatenate all the data frames in the list
 
             # Bacdive access statistics
-            if print_access_stats == 1:
-                access_stats_for_silva_input(total_number_silva_ids_input, access_failed, not_found,
-                                             out_file_path=output_dir, sample_name = sample_name)
+            if print_access_stats == True:
+                access_stats_for_file_input(total_number_silva_ids_input, access_failed, not_found,
+                                            out_file_path=output_dir, sample_name = sample_name)
 
-            if print_res_df_ToFile == 1:
+            if print_res_df_ToFile == True:
                 resulting_df_to_file_printer(resulting_df, output_dir=output_dir, sample_name = sample_name)
 
             return resulting_df
@@ -113,10 +113,10 @@ def base_call(bacdive_id ="", bacdive_password ="", input_via_file = 0, input_fi
             # Merge values from Genus and Species column for Bacdive query
             df_new = selected_rows.Genus.str.cat(selected_rows.Species, sep=' ')
             # Write resulting species found from input file to an output file
-            df_new.to_csv(output_dir + '%s Species_names_from_taxtable_file.csv' %sample_name, index=False, header=None)
+            df_new.to_csv(output_dir + '%s_Species_names_from_taxtable_file.csv' %sample_name, index=False, header=None)
             # read output file and return this dataframe
             try:
-                downstream_df = pd.read_csv(output_dir + "%s Species_names_from_taxtable_file.csv" %sample_name, header=None)
+                downstream_df = pd.read_csv(output_dir + "%s_Species_names_from_taxtable_file.csv" %sample_name, header=None)
             except pandas.errors.EmptyDataError:
                 print("There are no species information available for this dataset!")
                 sys.exit(0)
@@ -141,10 +141,10 @@ def base_call(bacdive_id ="", bacdive_password ="", input_via_file = 0, input_fi
                 resulting_df = pd.concat(dfs, ignore_index=True)  # concatenate all the data frames in the list
 
                 # Bacdive access statistics
-                if print_access_stats == 1:
+                if print_access_stats == True:
                     access_stats_for_taxtable_input(final_df, selected_rows, total_number_species_input, access_failed,
                                                     not_found, out_file_path=output_dir, sample_name = sample_name)
-                if print_res_df_ToFile == 1:
+                if print_res_df_ToFile == True:
                     resulting_df_to_file_printer(resulting_df, output_dir=output_dir, sample_name = sample_name)
 
                 return resulting_df
@@ -158,15 +158,55 @@ def base_call(bacdive_id ="", bacdive_password ="", input_via_file = 0, input_fi
         sys.exit(1)
 
 
-def access_stats_for_silva_input(total_number_silva_ids_input, access_failed, not_found, sample_name = "", out_file_path = "./"):
+def flattened_full_file_maker(resulting_df, columns_of_interest = [""], sample_name = "", taxtable_file_path = "", output_dir = "./"):
+    # Write columns to file of the following structure: taxonomic ranks -> # of strains per species found on Bacdive -> column of interest flattened
+    out_file_path = output_dir + '%s_Flattened_Bacdive_data.tsv' %sample_name
+    file = open(out_file_path, "w")
+    file.write(" " + "\t" + "Kingdom" + "\t" + "Phylum" + "\t" + "Class" + "\t" + "Order" + "\t" + "Family" + "\t" + "Genus" + "\t" + "Species" + "\t" + "Number of strains" + "\t" + "\t".join(str(interested_col) for interested_col in columns_of_interest) + "\n")
+
+    #Iterate throguh taxtable and if species unknown or not in Bacdive, fill everything with NA, else stored respective flattened values for the columns of interest
+    final_df = pd.read_table(taxtable_file_path, index_col=0)
+    for ind in final_df.index:
+        kingdom = str(final_df['Kingdom'][ind])
+        phylum = str(final_df['Phylum'][ind])
+        class_rank = str(final_df['Class'][ind])
+        order = str(final_df['Order'][ind])
+        family = str(final_df['Family'][ind])
+        genus = str(final_df['Genus'][ind])
+        species = str(final_df['Species'][ind])
+
+        full_species =  genus + " " + species
+
+        # If full species name is contained in resulting dataframe, then get strain count and flattened values
+        if (resulting_df["Name and taxonomic classification.species"] == full_species).any() == True:
+            strain_number = len(resulting_df.loc[resulting_df["Name and taxonomic classification.species"] ==  full_species].index)
+            list_results_interested_columns = []
+            # Get majority of non-na values and nan if information for all strains is nan
+            for interested_col in columns_of_interest:
+                first_cat_col = (resulting_df.loc[resulting_df["Name and taxonomic classification.species"] == full_species][interested_col]).dropna().tolist()
+                if len(first_cat_col) != 0:
+                    value = max(set(first_cat_col), key=first_cat_col.count)
+                    list_results_interested_columns.append(value)
+                else: # if no information is there for any strain of a given spieces then add nan
+                    value = "nan"
+                    list_results_interested_columns.append(value)
+            # Write to file
+            file.write(str(ind) + "\t" + kingdom + "\t" + phylum + "\t" + class_rank + "\t" + order + "\t" + family + "\t" + genus + "\t" + species + "\t" + str(strain_number) + "\t" + "\t".join(str(list_results_interested_columns[item]) for item in range(len(list_results_interested_columns))) + "\n")
+        # If not contained in bacdive or species is unknown, then fill up all following columns with NA's
+        else:
+            file.write(str(ind) + "\t" + kingdom + "\t" + phylum + "\t" + class_rank + "\t" + order + "\t" + family + "\t" + genus + "\t" + species + "\t" + "nan" + "\t" + "\t".join("nan" for item in range(len(columns_of_interest))) + "\n")
+    file.close()
+
+
+def access_stats_for_file_input(total_number_inputs, access_failed, not_found, sample_name ="", out_file_path ="./"):
     # Prints access statistics for input file types
-    access_worked = total_number_silva_ids_input - access_failed
-    percentage_found = access_worked / total_number_silva_ids_input * 100
-    out_file_path =  out_file_path + '%s access_stats_SILVA_input.tsv' %sample_name
+    access_worked = total_number_inputs - access_failed
+    percentage_found = access_worked / total_number_inputs * 100
+    out_file_path =  out_file_path + '%s_Access_stats_file_input.tsv' %sample_name
     file = open(out_file_path, "w")
     file.write("-- Access statistics --" + "\n")
-    file.write("-> Total number of SILVA ids are: " + str(total_number_silva_ids_input) + ", out of which " + str(round(percentage_found, 2)) + "% were found on Bacdive. Therefore, " + str(access_failed) + " SILVA ids were not found in Bacdive." + "\n")
-    file.write("The following SILVA ids were not found on Bacdive: " + "\n")
+    file.write("-> Total number of items are: " + str(total_number_inputs) + ", out of which " + str(round(percentage_found, 2)) + "% were found on Bacdive. Therefore, " + str(access_failed) + " items were not found in Bacdive." + "\n")
+    file.write("The following items were not found on Bacdive: " + "\n")
     for i in not_found:
         file.write(i + "\n")
     file.close()
@@ -176,7 +216,7 @@ def access_stats_for_taxtable_input(final_df, selected_rows, total_number_specie
     # Prints access statistics for input taxonomy tables
     access_worked = total_number_species_input - access_failed
     percentage_found = access_worked / total_number_species_input * 100
-    out_file_path = out_file_path + '%s access_stats_taxtable_input.tsv' %sample_name
+    out_file_path = out_file_path + '%s_Access_stats_taxtable_input.tsv' %sample_name
     file = open(out_file_path, "w")
     file.write("-- Access statistics --" + "\n")
     file.write("-> Your input taxtable file contains " + str(len(final_df)) + " rows. After removing NaN species-values from the dataframe we are left with " + str(len(selected_rows)) + " rows." + "\n")
@@ -190,55 +230,67 @@ def access_stats_for_taxtable_input(final_df, selected_rows, total_number_specie
 
 def resulting_df_to_file_printer(resulting_df,sample_name = "", output_dir = "./"):
     # Writes resulting dataframe with all BacDive information to file
-    resulting_df.to_csv(output_dir + '%s BacdiveInformation.tsv' %sample_name, sep='\t', encoding='utf-8', index=True)
+    resulting_df.to_csv(output_dir + '%s_BacdiveInformation.tsv' %sample_name, sep='\t', encoding='utf-8', index=True)
 
 
-def bacdive_call(bacdive_id ="", bacdive_password ="", input_lists = {}, sample_names = [], print_res_df_ToFile = 1, print_access_stats = 1, output_dir ="./"):
+def bacdive_call(bacdive_id ="", bacdive_password ="", inputs_list = [""], sample_names = [""], print_res_df_ToFile = True, print_access_stats = True, print_flattened_file = False,  columns_of_interest = [""], output_dir ="./"):
     """
     For multiple input files (either all input files or all taxonomy tables) this function reads the input, queries the BacDive database and stores resulting dataframe(s) and access statistics.
-
-    :param bacdive_id: Log in credential: BacDive id. Default is empty string. If entering the log-in credentials multiple times (for each input sample) is not desirable, then it is recommended to input the credtials once as function parameters.
-    :param bacdive_password: Log in credential: BacDive id. Default is empty string. If entering the log-in credentials multiple times (for each input sample) is not desirable, then it is recommended to input the credtials once as function parameters.
-    :param input_lists: Dictionary which specifies {<file-path> : <file-type>}. In case of input_via_file as the input type, then the exact content types has to be specified. The dictionary keys are thus the respective file paths; the dictionary values are lists with two elements. The first list element specifies the file type: "taxtable_input" or "input_via_file"; the second list element is only neccessary if the file type is "input_via_file" in order to further specify the input type of this file: "search_by_id", "search_by_culture_collection", "search_by_taxonomy", "search_by_16S_seq_accession" or "search_by_genome_accession". For example: {"input_data/SILVA_ids.txt" : ["input_via_file", "search_by_16S_seq_accession"], "./input_data/taxtable_from_phyloseq/nagel_taxtab.tsv" : ["taxtable_input"]}
-    :param sample_names: List of samples names
-    :param output_dir: Path to where resulting dataframe should be saved if saveToFile is set to True. Default is current directory ("./").
+    :param bacdive_id: Log in credential: BacDive id. Default is empty string. If entering the log-in credentials multiple times (for each input sample) is not desirable, then it is recommended to input the credentials once as function parameters.
+    :param bacdive_password: Log in credential: BacDive password. Default is empty string. If entering the log-in credentials multiple times (for each input sample) is not desirable, then it is recommended to input the credentials once as function parameters.
+    :param inputs_list: List which specifies (multiple) strings. Each string has the structure: "<file-path> <file-type> (<content-type>)" and is thus seperated by space(s). Content-type is, however, only required if you have input_via_file; it can have one of the following values: "search_by_id", "search_by_culture_collection", "search_by_taxonomy", "search_by_16S_seq_accession" or "search_by_genome_accession".
+    :param sample_names: List of samples names.
+    :param print_res_df_ToFile: Print the resulting dataframe with all Bacdive information to file or not. Default is True.
+    :param print_access_stats: Print the Bacdive access statistics to file or not. Default is True.
+    :param print_flattened_file: Print the flattened Bacdive information for certain columns of interest to file or not. Default is False.
+    :param columns_of_interest: Specify in this list which columns from BacdiveInformation.tsv you want to include in the flattened file. Default is empty list of strings.
+    :param output_dir: Path to where resulting dataframe should be saved. Default is current directory ("./").
     :return: List containing the resulting dataframe(s)  with all strain-level BacDive information for all those multiple inputs.
     """
+
     print('If you have not registered for Bacdive web services yet, please do so using the following link before running this package: ' + 'https://sso.dsmz.de/auth/realms/DSMZ/protocol/openid-connect/auth?response_type=code&redirect_uri=https%3A%2F%2Fapi.bacdive.dsmz.de%2Flogin&client_id=api.bacdive&nonce=fc4f465de78388722385d9bd3f82de1f&state=cab5a9d249f9502bd01f7715cc5d99bd&scope=openid')
 
     resulting_list_with_all_res_dfs = []
-    for file, filetype in input_lists.items():
-        index = list(input_lists).index(file)
-        sample_name = sample_names[index]
+    for element in inputs_list:
+        sample_name = sample_names[inputs_list.index(element)]
+        element_list = element.split(" ")
+        file = element_list[0]
+        filetype_first = element_list[1]
 
-        if filetype[0] == "taxtable_input":
+        if len(element_list) == 3:
+            filetype_second = element_list[2]
+
+        if filetype_first == "taxtable_input":
             resulting_df = base_call(bacdive_id=bacdive_id, bacdive_password=bacdive_password, taxtable_input=1, taxtable_file_path=file, sample_name=sample_name, output_dir=output_dir,
                                      print_res_df_ToFile=print_res_df_ToFile, print_access_stats=print_access_stats)
             resulting_list_with_all_res_dfs.append(resulting_df)
-        elif filetype[0] == "input_via_file":
-            if filetype[1] == "search_by_id":
+            if print_flattened_file == True:
+                flattened_full_file_maker(resulting_df, columns_of_interest= columns_of_interest, sample_name=sample_name, taxtable_file_path=file, output_dir=output_dir)
+
+        elif filetype_first == "input_via_file":
+            if filetype_second == "search_by_id":
                 resulting_df = base_call(bacdive_id=bacdive_id, bacdive_password=bacdive_password, input_via_file=1, input_file_path=file, search_by_id= True, sample_name=sample_name, output_dir=output_dir,
                                          print_res_df_ToFile=print_res_df_ToFile, print_access_stats=print_access_stats)
                 resulting_list_with_all_res_dfs.append(resulting_df)
 
-            elif filetype[1] == "search_by_culture_collection":
+            elif filetype_second == "search_by_culture_collection":
                 resulting_df = base_call(bacdive_id=bacdive_id, bacdive_password=bacdive_password, input_via_file=1, input_file_path=file, search_by_culture_collection=True, sample_name=sample_name,
                                          output_dir=output_dir, print_res_df_ToFile=print_res_df_ToFile, print_access_stats=print_access_stats)
                 resulting_list_with_all_res_dfs.append(resulting_df)
 
-            elif filetype[1] == "search_by_taxonomy":
+            elif filetype_second == "search_by_taxonomy":
                 resulting_df = base_call(bacdive_id=bacdive_id, bacdive_password=bacdive_password, input_via_file=1, input_file_path=file, search_by_taxonomy=True,
                                          output_dir=output_dir, sample_name=sample_name,
                                          print_res_df_ToFile=print_res_df_ToFile, print_access_stats=print_access_stats)
                 resulting_list_with_all_res_dfs.append(resulting_df)
 
-            elif filetype[1] == "search_by_16S_seq_accession":
+            elif filetype_second == "search_by_16S_seq_accession":
                 resulting_df = base_call(bacdive_id=bacdive_id, bacdive_password=bacdive_password, input_via_file=1, input_file_path=file, search_by_16S_seq_accession=True,
                                          output_dir=output_dir, sample_name=sample_name,
                                          print_res_df_ToFile=print_res_df_ToFile, print_access_stats=print_access_stats)
                 resulting_list_with_all_res_dfs.append(resulting_df)
 
-            elif filetype[1] == "search_by_genome_accession":
+            elif filetype_second == "search_by_genome_accession":
                 resulting_df = base_call(bacdive_id=bacdive_id, bacdive_password=bacdive_password, input_via_file=1, input_file_path=file, search_by_genome_accession=True,
                                          output_dir=output_dir, sample_name=sample_name, print_res_df_ToFile=print_res_df_ToFile, print_access_stats=print_access_stats)
                 resulting_list_with_all_res_dfs.append(resulting_df)

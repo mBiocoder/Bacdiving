@@ -14,3 +14,9 @@ setuptools>=65.5.0
 toyplot>=1.0.3
 toytree>=2.0.1
 worldmap>=0.1.6
+
+sphinx==5.2.3
+sphinx-rtd-theme==1.0.0
+
+
+

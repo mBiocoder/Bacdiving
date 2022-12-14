@@ -23,6 +23,7 @@ REQUIRED = [
     'pandas>=1.5.0',
     'seaborn',
     'setuptools>=65.5.0',
+    'scikit-learn',
     'scipy>=1.9.2',
     'toyplot>=1.0.3',
     'toytree>=2.0.1',

@@ -30,7 +30,13 @@ REQUIRED = [
     'wheel>=0.34.1',
     'worldmap>=0.1.6']
 
-
+# What packages are optional?
+EXTRAS = {
+        "docs": [
+            "sphinx",
+            "sphinx_rtd_theme",
+        ],
+    }
 
 long_description = 'README.md'
 

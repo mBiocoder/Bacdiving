@@ -70,7 +70,7 @@ As soon as you have registered on BacDive, you can use your credentials to run B
    :param print_access_stats:  Print the Bacdive access statistics to file or not.
    :type print_access_stats: bool
    :param print_flattened_file: Print the flattened Bacdive information for certain columns of interest to file or not. 
-   :type print_flattened_file: str
+   :type print_flattened_file: bool
    :param columns_of_interest: Specify in this list which columns from BacdiveInformation.tsv you want to include in the flattened file. 
    :type columns_of_interest: list[str]
    :param output_dir: Path to where plot should be saved. 

@@ -169,7 +169,7 @@ def circular_treeplot(resulting_df, width = 1400, height = 1400, saveToFile = Tr
                                                'Name and taxonomic classification.LPSN.family',
                                                'Name and taxonomic classification.LPSN.genus',
                                                'Name and taxonomic classification.LPSN.species'])
-    tre1 = toytree.tree(myNewick, tree_format=1)
+    tre1 = toytree.tree(myNewick)
 
     if saveToFile == False:  #Attention: if saveToFile == False and the program is run via console the resulting plot may not be visible. Howver, it will work if run on notebook
         tre1.draw(
@@ -184,7 +184,6 @@ def circular_treeplot(resulting_df, width = 1400, height = 1400, saveToFile = Tr
             node_labels=False,
             layout='c',
             edge_type='c',
-            node_sizes=[8 if i else 0 for i in tre1.get_node_values()],
             node_style={"stroke": "black"},
             width=width,
             height=height );
@@ -197,4 +196,5 @@ def circular_treeplot(resulting_df, width = 1400, height = 1400, saveToFile = Tr
             toyplot.html.render(canvas, output_dir +"tree-plot.html")
         else:
             print("This output format is not supported! Please choose from .pdf, .svg or .html.")
+
 
